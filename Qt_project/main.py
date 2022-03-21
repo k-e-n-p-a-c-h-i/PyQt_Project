@@ -5,7 +5,7 @@ import webbrowser
 from PIL import Image
 from PyQt5 import uic
 from PyQt5.QtGui import QImage, QPalette, QBrush, QIcon, QPixmap
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QVBoxLayout,\
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QVBoxLayout, \
     QDialog, QMessageBox, QFileDialog, QTableWidgetItem, QAbstractItemView
 from PyQt5.QtCore import Qt, QCoreApplication, QDate
 
@@ -14,7 +14,8 @@ class EmptinessError(Exception):
     pass
 
 
-class MyWidget(QMainWindow): #основное окно
+# main window
+class MyWidget(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi('UI_files/main.ui', self)
@@ -91,7 +92,7 @@ class Tools(QWidget):
         elif self.sender() == self.pushButton_4:
             self.win = HydrometerReadings('UI_files/hydrometer_readings.ui')
         elif self.sender() == self.pushButton_2:
-            self.win = Alco1AndAlco2('UI_files/alcohol1_and_alcohol2.ui')
+            self.win = Alc1AndAlc2('UI_files/alcohol1_and_alcohol2.ui')
         elif self.sender() == self.pushButton_6:
             self.win = AbsAlcHeads('UI_files/heads_by_absolute_alcohol.ui')
         self.win.show()
@@ -106,7 +107,8 @@ class Tools(QWidget):
         form.show()
 
 
-class AlcAndWat(QDialog): #калькулятор разбавления водой
+# water dilution calculator
+class AlcAndWat(QDialog):
     def __init__(self, form):
         super().__init__()
         uic.loadUi(form, self)
@@ -129,7 +131,8 @@ class AlcAndWat(QDialog): #калькулятор разбавления вод�
             QMessageBox.critical(self, "Ошибка", "Недопустимый формат данных", QMessageBox.Ok)
 
 
-class Alco1AndAlco2(AlcAndWat): #калькулятор смешивания 2х жидкостей
+# calculator for mixing two liquids
+class Alc1AndAlc2(AlcAndWat):
     def run(self):
         try:
             v1, c1 = float(self.lineEdit.text()), float(self.lineEdit_2.text())
@@ -141,7 +144,8 @@ class Alco1AndAlco2(AlcAndWat): #калькулятор смешивания 2х
             QMessageBox.critical(self, "Ошибка", "Недопустимый формат данных", QMessageBox.Ok)
 
 
-class SugarHeads(AlcAndWat): #калькулятор голов по сахару
+# sugar goals calculator
+class SugarHeads(AlcAndWat):
     def run(self):
         try:
             self.textBrowser_3.setText(f'Необходимо отобрать '
@@ -150,7 +154,8 @@ class SugarHeads(AlcAndWat): #калькулятор голов по сахар�
             QMessageBox.critical(self, "Ошибка", "Недопустимый формат данных", QMessageBox.Ok)
 
 
-class AbsAlcHeads(AlcAndWat): #калькулятор голов по абсолютному спирту
+# calculator of heads by absolute alcohol
+class AbsAlcHeads(AlcAndWat):
     def initUI(self):
         self.setFixedSize(359, 603)
         self.setModal(True)
@@ -179,7 +184,8 @@ class AbsAlcHeads(AlcAndWat): #калькулятор голов по абсол
             QMessageBox.critical(self, "Ошибка", "Недопустимый формат данных", QMessageBox.Ok)
 
 
-class HydrometerReadings(AlcAndWat): #Коррекция показаний ареометра
+# Correction of hydrometer readings
+class HydrometerReadings(AlcAndWat):
     def run(self):
         try:
             a, b = float(self.lineEdit_11.text()), float(self.lineEdit_10.text())
@@ -336,7 +342,8 @@ class AddRect(AddRecipe):
         Rectification.inf(self)
 
 
-class InfoWin(QDialog): #информация о рецептах
+# information about recipes
+class InfoWin(QDialog):
     def __init__(self, but):
         super().__init__()
         self.but = but
@@ -355,7 +362,6 @@ class InfoWin(QDialog): #информация о рецептах
         self.pushButton_3.clicked.connect(self.cancellation)
         self.pushButton_5.clicked.connect(self.add_pic)
         self.pushButton_5.hide()
-
 
         self.lineEdit.setText(self.but.text())
         con = sqlite3.connect('rectification.db')
@@ -505,7 +511,8 @@ class RectInfoWin(QDialog):
             self.close()
 
 
-def fon(self): #делает фон
+# makes the background
+def fon(self):
     oImage = QImage("Picture_files/fon.jpg")
     sImage = oImage.scaled(self.size())
     palette = QPalette()
